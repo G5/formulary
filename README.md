@@ -1,6 +1,8 @@
 # Formulary
 
-TODO: Write a gem description
+> <strong>Formularies</strong> (singular <strong>formulary</strong>; Latin <em>littera(e) formularis, -ares</em>) are medieval collections of models for the execution of documents (acta), public or private; a space being left for the insertion of names, dates, and circumstances peculiar to each case. Their modern equivalent are forms.
+>
+> -- <cite><a href="http://en.wikipedia.org/wiki/Formulary_%28model_documents%29">Wikipedia</a></cite> 
 
 ## Installation
 
