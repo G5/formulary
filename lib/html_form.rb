@@ -79,4 +79,4 @@ protected
 end
 
 require 'nokogiri'
-require 'active_support/all'
+require 'active_support/core_ext/object/blank'
