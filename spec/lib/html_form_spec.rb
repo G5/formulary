@@ -25,6 +25,11 @@ describe HtmlForm do
         </div>
 
         <div class="field">
+          <label for="g5_email">G5 Email</label>
+          <input type="email" name="lead[g5_email]" id="g5_email" pattern="@getg5\.com$" />
+        </div>
+
+        <div class="field">
           <label for="phone">Phone</label>
           <input type="tel" name="lead[phone]" id="phone" />
         </div>
@@ -67,7 +72,7 @@ describe HtmlForm do
     let(:fields) { html_form.fields }
     subject { fields }
 
-    its(:length) { should eq(9) }
+    its(:length) { should eq(10) }
 
     describe "a required text input" do
       subject { fields.first }
@@ -78,7 +83,7 @@ describe HtmlForm do
     end
 
     describe "a textarea that is not required" do
-      subject { fields[8] }
+      subject { fields[9] }
 
       its(:name) { should eq("message") }
       its(:type) { should eq("textarea") }
@@ -86,7 +91,7 @@ describe HtmlForm do
     end
 
     describe "an input with a pattern attribute" do
-      subject { fields[5] }
+      subject { fields[6] }
 
       its(:pattern) { should eq("^[A-Za-z]*$") }
     end
@@ -106,6 +111,13 @@ describe HtmlForm do
       end
 
       it { should be_true }
+    end
+
+    context "with valid parameters" do
+      context "phone number" do
+        let(:params) { { first_name: "First", last_name: "Last", phone: "+1 456 123987", email: "test@example.com" } }
+        it { should be_true }
+      end
     end
 
     context "with invalid parameters" do
@@ -128,9 +140,33 @@ describe HtmlForm do
       context "due to failing regex check" do
         let(:params) { { city: "New York" } }
 
+        it { should be_false }
+
         it "has an error for the field that doesn't match the pattern" do
           html_form.errors.keys.should include("city")
           html_form.errors["city"].should match(/format/)
+        end
+      end
+
+      context "due to invalid email address" do
+        let(:params) { { first_name: "First", last_name: "Last", email: "testing"} }
+
+        it { should be_false }
+
+        it "has an error for the email field" do
+          html_form.errors.keys.should include("email")
+          html_form.errors["email"].should include("not a valid email")
+        end
+      end
+
+      context "due to invalid g5 email address" do
+        let(:params) { { first_name: "First", last_name: "Last", email: "test@test.com", g5_email: "test@test.com" } }
+
+        it { should be_false }
+
+        it "has an error for the g5 email field" do
+          html_form.errors.keys.should include("g5_email")
+          html_form.errors["g5_email"].should include("format")
         end
       end
     end

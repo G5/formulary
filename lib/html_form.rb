@@ -14,12 +14,13 @@ class HtmlForm
     end
 
     def valid?
-      presence_correct && pattern_correct
+      presence_correct && pattern_correct && correct_for_type
     end
 
     def error
       return "required" unless presence_correct
       return "format" unless pattern_correct
+      return "not a valid #{@type}" unless correct_for_type
     end
 
   protected
@@ -31,6 +32,17 @@ class HtmlForm
     def pattern_correct
       return true if @pattern.blank? || @value.blank?
       @value.match(Regexp.new(@pattern))
+    end
+
+    def correct_for_type
+      return true if @value.blank?
+
+      case @type
+      when "email"
+        EmailVeracity::Address.new(@value).valid?
+      else
+        true
+      end
     end
   end
 
@@ -68,11 +80,15 @@ protected
     doc = Nokogiri::HTML(@markup)
 
     doc.css("input[type!='submit'], textarea").map do |input|
+      type = input.name == "textarea" ? "textarea" : input.attributes["type"].value
+      pattern = input.attributes.include?("pattern") ? input.attributes["pattern"].value : nil
+
+
       Field.new(
         input.attributes["id"].value,
-        input.name == "textarea" ? "textarea" : input.attributes["type"].value,
+        type,
         input.attributes.include?("required"),
-        input.attributes.include?("pattern") ? input.attributes["pattern"].value : nil
+        pattern
       )
     end
   end
@@ -80,3 +96,4 @@ end
 
 require 'nokogiri'
 require 'active_support/core_ext/object/blank'
+require 'email_veracity'
