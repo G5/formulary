@@ -66,6 +66,15 @@ describe HtmlForm do
     EOS
   end
 
+  def valid_params(hash = {})
+    {
+      first_name: "First",
+      last_name: "Last",
+      email: "test@test.com",
+      g5_email: "test@getg5.com"
+    }.merge(hash)
+  end
+
   let(:html_form) { HtmlForm.new(markup) }
 
   describe "#fields" do
@@ -102,20 +111,13 @@ describe HtmlForm do
     before { subject }
 
     context "with valid parameters" do
-      let(:params) do
-        {
-          first_name: "First",
-          last_name: "Last",
-          email: "test@example.com"
-        }
-      end
-
+      let(:params) { valid_params }
       it { should be_true }
     end
 
     context "with valid parameters" do
       context "phone number" do
-        let(:params) { { first_name: "First", last_name: "Last", phone: "+1 456 123987", email: "test@example.com" } }
+        let(:params) { valid_params(phone: "+1 456 123987") }
         it { should be_true }
       end
     end
@@ -128,28 +130,28 @@ describe HtmlForm do
 
         it "has an error for an omitted field" do
           html_form.errors.keys.should include("first_name")
-          html_form.errors["first_name"].should match(/required/)
+          html_form.errors["first_name"].should include("required")
         end
 
         it "has an error for a blank field" do
           html_form.errors.keys.should include("last_name")
-          html_form.errors["last_name"].should match(/required/)
+          html_form.errors["last_name"].should include("required")
         end
       end
 
       context "due to failing regex check" do
-        let(:params) { { city: "New York" } }
+        let(:params) { valid_params(city: "New York") }
 
         it { should be_false }
 
         it "has an error for the field that doesn't match the pattern" do
           html_form.errors.keys.should include("city")
-          html_form.errors["city"].should match(/format/)
+          html_form.errors["city"].should include("format")
         end
       end
 
       context "due to invalid email address" do
-        let(:params) { { first_name: "First", last_name: "Last", email: "testing"} }
+        let(:params) { valid_params(email: "testing") }
 
         it { should be_false }
 
@@ -160,7 +162,7 @@ describe HtmlForm do
       end
 
       context "due to invalid g5 email address" do
-        let(:params) { { first_name: "First", last_name: "Last", email: "test@test.com", g5_email: "test@test.com" } }
+        let(:params) { valid_params(g5_email: "test@test.com") }
 
         it { should be_false }
 
