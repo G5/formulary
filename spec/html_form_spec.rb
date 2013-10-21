@@ -107,8 +107,8 @@ describe Formulary::HtmlForm do
   end
 
   describe "#valid?" do
-    subject { html_form.valid?(params) }
-    before { subject }
+    subject(:valid) { html_form.valid?(params) }
+    #before { subject }
 
     context "with valid parameters" do
       let(:params) { valid_params }
@@ -145,6 +145,7 @@ describe Formulary::HtmlForm do
         it { should be_false }
 
         it "has an error for the field that doesn't match the pattern" do
+          valid
           html_form.errors.keys.should include("city")
           html_form.errors["city"].should include("format")
         end
@@ -156,6 +157,7 @@ describe Formulary::HtmlForm do
         it { should be_false }
 
         it "has an error for the email field" do
+          valid
           html_form.errors.keys.should include("email")
           html_form.errors["email"].should include("not a valid email")
         end
@@ -167,8 +169,17 @@ describe Formulary::HtmlForm do
         it { should be_false }
 
         it "has an error for the g5 email field" do
+          valid
           html_form.errors.keys.should include("g5_email")
           html_form.errors["g5_email"].should include("format")
+        end
+      end
+
+      context "due to unexpected parameters" do
+        let(:params) { valid_params(extra: "test") }
+
+        it "raises a Formulary::UnexpectedParameter exception" do
+          expect { valid }.to raise_error(Formulary::UnexpectedParameter, /extra/)
         end
       end
     end

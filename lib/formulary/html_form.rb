@@ -57,7 +57,7 @@ module Formulary
 
     def valid?(params)
       params.each do |key, value|
-        raise ActiveModel::MassAssignmentSecurity::Error.new unless find_field(key)
+        raise UnexpectedParameter.new("Got unexpected field '#{key}'") unless find_field(key)
 
         find_field(key).set_value(value)
       end
@@ -93,5 +93,9 @@ module Formulary
         )
       end
     end
+  end
+
+  class UnexpectedParameter < StandardError
+
   end
 end
