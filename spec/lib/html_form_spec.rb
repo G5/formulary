@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HtmlForm do
+describe Formulary::HtmlForm do
   let(:markup) do
     <<-EOS
     <div class="lead widget">
@@ -75,7 +75,7 @@ describe HtmlForm do
     }.merge(hash)
   end
 
-  let(:html_form) { HtmlForm.new(markup) }
+  let(:html_form) { Formulary::HtmlForm.new(markup) }
 
   describe "#fields" do
     let(:fields) { html_form.fields }

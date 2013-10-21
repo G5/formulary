@@ -16,4 +16,4 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
-require 'html_form'
+require 'formulary'
