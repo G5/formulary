@@ -11,52 +11,52 @@ describe Formulary::HtmlForm do
 
         <div class="field">
           <label for="first_name">First Name</label>
-          <input type="text" name="lead[first_name]" id="first_name" required />
+          <input type="text" name="first_name" required />
         </div>
 
         <div class="field">
           <label for="last_name">Last Name</label>
-          <input type="text" name="lead[last_name]" id="last_name" required />
+          <input type="text" name="last_name" required />
         </div>
 
         <div class="field">
           <label for="email">Email</label>
-          <input type="email" name="lead[email]" id="email" required />
+          <input type="email" name="email" required />
         </div>
 
         <div class="field">
           <label for="g5_email">G5 Email</label>
-          <input type="email" name="lead[g5_email]" id="g5_email" pattern="@getg5\.com$" />
+          <input type="email" name="g5_email" pattern="@getg5\.com$" />
         </div>
 
         <div class="field">
           <label for="phone">Phone</label>
-          <input type="tel" name="lead[phone]" id="phone" />
+          <input type="tel" name="phone" />
         </div>
 
         <div class="field">
           <label for="street_address">Street Address</label>
-          <input type="text" name="lead[street_address]" id="street_address" />
+          <input type="text" name="street_address" />
         </div>
 
         <div class="field">
           <label for="city">City</label>
-          <input type="text" name="lead[city]" id="city" pattern="^[A-Za-z]*$" />
+          <input type="text" name="city" pattern="^[A-Za-z]*$" />
         </div>
 
         <div class="field">
           <label for="state">State</label>
-          <input type="text" name="lead[state]" id="state" />
+          <input type="text" name="state" />
         </div>
 
         <div class="field">
           <label for="zip">Zip</label>
-          <input type="text" name="lead[zip]" id="zip" />
+          <input type="text" name="zip" />
         </div>
 
         <div class="field">
           <label for="message">Message</label>
-          <textarea name="lead[message]" id="message"></textarea>
+          <textarea name="message"></textarea>
         </div>
 
         <input type="submit" value="Apply" />

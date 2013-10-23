@@ -86,7 +86,7 @@ module Formulary
 
 
         Field.new(
-          input.attributes["id"].value,
+          input.attributes["name"].value,
           type,
           input.attributes.include?("required"),
           pattern
