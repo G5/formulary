@@ -20,7 +20,51 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a new Formulary Form
+    
+```ruby
+require 'formulary'
+
+form_html = <<EOF
+<form>
+  <input type="email" name="email" required />
+  <input type="username" name="username" pattern="[a-z0-9_-]{3,16}" />
+</form>
+EOF
+  
+html_form = Formulary::HtmlForm.new(form_html)
+```
+
+Validate the form based on HTML5 field types and/or patterns and view which fields are invalid and why.
+    
+```ruby
+html_form.valid?({ email: "test@example.com", username: "person" })
+# => true
+
+html_form.valid?({ email: "invalid", username: "person" })
+# => false
+
+html_form.errors
+# => {"email"=>"not a valid email"}
+```
+
+When an unexpected field is submitted that wasn't in the original markup, it will raise a `Formulary::UnexpectedParameter` exception:
+
+```ruby
+html_form.valid?({ unknown: "value" })
+# => Formulary::UnexpectedParameter: Got unexpected field 'unknown'
+```
+
+## Currently Supported
+
+- type="email"
+- required
+- pattern="REGEX"
+
+## TODO
+
+- select, checkbox, radio and multiselect tags have one of the valid options selected
+- validate [other html5 field types](http://www.w3schools.com/html/html5_form_input_types.asp)
 
 ## Contributing
 
