@@ -3,11 +3,12 @@ module Formulary
     class Field
       attr_accessor :name, :type, :required, :pattern
 
-      def initialize(name, type, required, pattern=nil)
+      def initialize(name, type, required, pattern=nil, valid_values)
         @name = name
         @type = type
         @required = required
         @pattern = pattern
+        @valid_values = valid_values
       end
 
       def set_value(value)
@@ -15,13 +16,14 @@ module Formulary
       end
 
       def valid?
-        presence_correct && pattern_correct && correct_for_type
+        presence_correct && pattern_correct && correct_for_type && value_in_options
       end
 
       def error
         return "required" unless presence_correct
         return "format" unless pattern_correct
         return "not a valid #{@type}" unless correct_for_type
+        return "must choose an item from the list" unless value_in_options
       end
 
     protected
@@ -44,6 +46,11 @@ module Formulary
         else
           true
         end
+      end
+
+      def value_in_options
+        return true if @valid_values.nil?
+        @valid_values.include?(@value)
       end
     end
 
@@ -80,16 +87,32 @@ module Formulary
     def build_fields
       doc = Nokogiri::HTML(@markup)
 
-      doc.css("input[type!='submit'], textarea").map do |input|
-        type = input.name == "textarea" ? "textarea" : input.attributes["type"].value
+      doc.css("input[type!='submit'], textarea, select").map do |input|
+        type = case input.name
+        when "textarea"
+          "textarea"
+        when "select"
+          "select"
+        else
+          input.attributes["type"].value
+        end
         pattern = input.attributes.include?("pattern") ? input.attributes["pattern"].value : nil
 
+        valid_values = nil
+        if input.name == "select"
+          options = input.css("option")
+
+          valid_values = options.map do |option|
+            option["value"] ? option["value"] : option.text
+          end
+        end
 
         Field.new(
           input.attributes["name"].value,
           type,
           input.attributes.include?("required"),
-          pattern
+          pattern,
+          valid_values
         )
       end
     end

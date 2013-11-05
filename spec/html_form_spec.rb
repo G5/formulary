@@ -59,6 +59,14 @@ describe Formulary::HtmlForm do
           <textarea name="message"></textarea>
         </div>
 
+        <div class="field">
+          <label for="unit">Unit</label>
+          <select name="unit">
+            <option>5x5</option>
+            <option value="5x10">Five By Ten</option>
+          </select>
+        </div>
+
         <input type="submit" value="Apply" />
 
       </form>
@@ -71,7 +79,8 @@ describe Formulary::HtmlForm do
       first_name: "First",
       last_name: "Last",
       email: "test@test.com",
-      g5_email: "test@getg5.com"
+      g5_email: "test@getg5.com",
+      unit: "5x5"
     }.merge(hash)
   end
 
@@ -81,7 +90,7 @@ describe Formulary::HtmlForm do
     let(:fields) { html_form.fields }
     subject { fields }
 
-    its(:length) { should eq(10) }
+    its(:length) { should eq(11) }
 
     describe "a required text input" do
       subject { fields.first }
@@ -104,11 +113,18 @@ describe Formulary::HtmlForm do
 
       its(:pattern) { should eq("^[A-Za-z]*$") }
     end
+
+    describe "a select field" do
+      subject { fields[10] }
+
+      its(:name) { should eq("unit") }
+      its(:type) { should eq("select") }
+      its(:required) { should be_false }
+    end
   end
 
   describe "#valid?" do
     subject(:valid) { html_form.valid?(params) }
-    #before { subject }
 
     context "with valid parameters" do
       let(:params) { valid_params }
@@ -118,6 +134,16 @@ describe Formulary::HtmlForm do
     context "with valid parameters" do
       context "phone number" do
         let(:params) { valid_params(phone: "+1 456 123987") }
+        it { should be_true }
+      end
+
+      context "using text in a valueless option" do
+        let(:params) { valid_params(unit: "5x5") }
+        it { should be_true }
+      end
+
+      context "using text from an option with a value" do
+        let(:params) { valid_params(unit: "5x10") }
         it { should be_true }
       end
     end
@@ -180,6 +206,18 @@ describe Formulary::HtmlForm do
 
         it "raises a Formulary::UnexpectedParameter exception" do
           expect { valid }.to raise_error(Formulary::UnexpectedParameter, /extra/)
+        end
+      end
+
+      context "due to a unexpected option for a select" do
+        let(:params) { valid_params(unit: "wrong") }
+
+        it { should be_false }
+
+        it "has an error for the select field" do
+          valid
+          html_form.errors.keys.should include("unit")
+          html_form.errors["unit"].should include("choose")
         end
       end
     end
