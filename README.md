@@ -67,11 +67,12 @@ html_form.valid?({ unknown: "value" })
 - type="email"
 - required
 - pattern="REGEX"
+- selects, selected value is one of the options
 
 
 ## TODO
 
-- select, checkbox, radio and multiselect tags have one of the valid options selected
+- checkbox, radio and multiselect tags have one of the valid options selected
 - validate [other html5 field types](http://www.w3schools.com/html/html5_form_input_types.asp)
 
 
