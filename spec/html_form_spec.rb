@@ -69,6 +69,8 @@ describe Formulary::HtmlForm do
 
         <input type="submit" value="Apply" />
 
+        <input type="hidden" name="syndication_url" value="example.com" />
+
       </form>
     </div>
     EOS
@@ -90,7 +92,7 @@ describe Formulary::HtmlForm do
     let(:fields) { html_form.fields }
     subject { fields }
 
-    its(:length) { should eq(11) }
+    its(:length) { should eq(12) }
 
     describe "a required text input" do
       subject { fields.first }
@@ -100,8 +102,16 @@ describe Formulary::HtmlForm do
       its(:required) { should be_true }
     end
 
-    describe "a textarea that is not required" do
+    describe "a hidden input that is not required" do
       subject { fields[9] }
+
+      its(:name) { should eq("syndication_url") }
+      its(:type) { should eq("hidden") }
+      its(:required) { should be_false }
+    end
+
+    describe "a textarea that is not required" do
+      subject { fields[10] }
 
       its(:name) { should eq("message") }
       its(:type) { should eq("textarea") }
@@ -115,7 +125,7 @@ describe Formulary::HtmlForm do
     end
 
     describe "a select field" do
-      subject { fields[10] }
+      subject { fields[11] }
 
       its(:name) { should eq("unit") }
       its(:type) { should eq("select") }
@@ -150,6 +160,22 @@ describe Formulary::HtmlForm do
 
     context "with invalid parameters" do
       context "due to missing parameters" do
+        let(:params) { { last_name: "" } }
+
+        it { should be_false }
+
+        it "has an error for an omitted field" do
+          html_form.errors.keys.should include("first_name")
+          html_form.errors["first_name"].should include("required")
+        end
+
+        it "has an error for a blank field" do
+          html_form.errors.keys.should include("last_name")
+          html_form.errors["last_name"].should include("required")
+        end
+      end
+
+      context "due to missing hidden field" do
         let(:params) { { last_name: "" } }
 
         it { should be_false }
