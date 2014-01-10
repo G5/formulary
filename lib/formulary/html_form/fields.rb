@@ -12,3 +12,5 @@ require 'formulary/html_form/fields/textarea'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::Textarea
 require 'formulary/html_form/fields/select'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::Select
+
+require 'formulary/html_form/fields/radio_button_group'

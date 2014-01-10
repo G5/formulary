@@ -34,13 +34,23 @@ module Formulary
     def build_fields
       doc = Nokogiri::HTML(@markup)
 
-      doc.css("input[type!='submit'], textarea, select").map do |field|
-        field_klass = FIELD_TYPES.detect { |k| k.compatible_with?(field) }
+      fields = doc.css("input[type!='submit'][type!='radio'], textarea, select").map do |element|
+        field_klass = FIELD_TYPES.detect { |k| k.compatible_with?(element) }
         if field_klass.nil?
-          raise UnsupportedFieldType.new("I can't handle this field: #{field.inspect}")
+          raise UnsupportedFieldType.new("I can't handle this field: #{element.inspect}")
         end
-        field_klass.new(field)
+        field_klass.new(element)
       end
+
+      grouped_elements = doc.css("input[type='radio']").group_by do |element|
+        element.attributes["name"].value
+      end
+
+      grouped_elements.each do |element_group|
+        fields << Fields::RadioButtonGroup.new(*element_group)
+      end
+
+      fields
     end
   end
 

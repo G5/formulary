@@ -67,6 +67,11 @@ describe Formulary::HtmlForm do
           </select>
         </div>
 
+        <input type="radio" name="foods" value="bacon">Bacon<br>
+        <input type="radio" name="foods" value="butter" checked>Butter<br>
+
+        <input type="radio" name="beverages" value="water">Water<br>
+
         <input type="submit" value="Apply" />
 
         <input type="hidden" name="syndication_url" value="example.com" />
@@ -129,11 +134,16 @@ describe Formulary::HtmlForm do
       end
 
       context "with an invalid submission" do
-        let(:params) { { email: "invalid", g5_email: "test@example.com" } }
+        let(:params) do
+          {
+            email: "invalid", g5_email: "test@example.com", foods: "water"
+          }
+        end
 
         its(["first_name"]) { should include("required") }
         its(["email"]) { should include("email") }
         its(["g5_email"]) { should include("format") }
+        its(["foods"]) { should include("choose") }
       end
     end
   end
