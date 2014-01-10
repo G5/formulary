@@ -35,26 +35,6 @@ describe Formulary::HtmlForm do
         </div>
 
         <div class="field">
-          <label for="street_address">Street Address</label>
-          <input type="text" name="street_address" />
-        </div>
-
-        <div class="field">
-          <label for="city">City</label>
-          <input type="text" name="city" pattern="^[A-Za-z]*$" />
-        </div>
-
-        <div class="field">
-          <label for="state">State</label>
-          <input type="text" name="state" />
-        </div>
-
-        <div class="field">
-          <label for="zip">Zip</label>
-          <input type="text" name="zip" />
-        </div>
-
-        <div class="field">
           <label for="message">Message</label>
           <textarea name="message"></textarea>
         </div>
