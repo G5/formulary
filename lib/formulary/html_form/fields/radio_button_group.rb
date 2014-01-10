@@ -1,33 +1,17 @@
 module Formulary::HtmlForm::Fields
-  class RadioButtonGroup < Field
+  class RadioButtonGroup < FieldGroup
+    def self.compatible_type
+      "radio"
+    end
+
     def self.supports_required?
       true
-    end
-
-    def initialize(group_name, elements)
-      @group_name, @elements = group_name, elements
-    end
-
-    def name
-      @group_name
-    end
-
-    def valid?
-      super && value_in_list?
-    end
-
-    def error
-      return super if super.present?
-      return "choose" if !value_in_list?
     end
 
   protected
 
     def required?
-      @elements.each do |element|
-        return true if element.attributes.include?("required")
-      end
-      return false
+      @elements.any? { |e| e.attributes.include?("required") }
     end
 
     def value_in_list?

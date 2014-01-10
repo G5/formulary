@@ -10,6 +10,7 @@ EmailVeracity::Config[:skip_lookup] = true
 module Formulary
   class HtmlForm
     FIELD_TYPES = []
+    FIELD_GROUP_TYPES = []
   end
 end
 

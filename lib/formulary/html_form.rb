@@ -1,5 +1,16 @@
 module Formulary
   class HtmlForm
+    SINGULAR_FIELD_SELECTOR = <<-EOS
+      input[type!='submit'][type!='radio'][type!='checkbox'],
+      textarea,
+      select
+    EOS
+
+    GROUPED_FIELD_SELECTOR = <<-EOS
+      input[type='radio'],
+      input[type='checkbox']
+    EOS
+
     def initialize(markup)
       @markup = markup
       fields
@@ -24,7 +35,7 @@ module Formulary
   protected
 
     def fields
-      @fields ||= build_fields
+      @fields || build_fields
     end
 
     def find_field(name)
@@ -32,33 +43,40 @@ module Formulary
     end
 
     def build_fields
+      @fields = []
       doc = Nokogiri::HTML(@markup)
 
-      fields = doc.css("input[type!='submit'][type!='radio'], textarea, select").map do |element|
+      build_singular_fields_from(doc)
+      build_grouped_fields_from(doc)
+    end
+
+    def build_singular_fields_from(doc)
+      doc.css(SINGULAR_FIELD_SELECTOR.strip).map do |element|
         field_klass = FIELD_TYPES.detect { |k| k.compatible_with?(element) }
         if field_klass.nil?
           raise UnsupportedFieldType.new("I can't handle this field: #{element.inspect}")
         end
-        field_klass.new(element)
+        @fields << field_klass.new(element)
       end
+    end
 
-      grouped_elements = doc.css("input[type='radio']").group_by do |element|
+    def build_grouped_fields_from(doc)
+      grouped_elements = doc.css(GROUPED_FIELD_SELECTOR.strip).group_by do |element|
         element.attributes["name"].value
       end
 
       grouped_elements.each do |element_group|
-        fields << Fields::RadioButtonGroup.new(*element_group)
-      end
+        group_name, elements = *element_group
 
-      fields
+        group_klass = FIELD_GROUP_TYPES.detect { |k| k.compatible_with?(elements) }
+        @fields << group_klass.new(group_name, elements)
+      end
     end
   end
 
   class UnexpectedParameter < StandardError
-
   end
 
   class UnsupportedFieldType < StandardError
-
   end
 end

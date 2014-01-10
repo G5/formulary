@@ -52,10 +52,11 @@ describe Formulary::HtmlForm do
 
         <input type="radio" name="beverages" value="water">Water<br>
 
-        <input type="submit" value="Apply" />
-
         <input type="hidden" name="syndication_url" value="example.com" />
 
+        <input type="checkbox" name="terms">
+
+        <input type="submit" value="Apply" />
       </form>
     </div>
     EOS

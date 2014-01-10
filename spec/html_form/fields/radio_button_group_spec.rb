@@ -1,6 +1,43 @@
 require 'spec_helper'
 
 describe Formulary::HtmlForm::Fields::RadioButtonGroup do
+  describe ".compatible_with?" do
+    subject { Formulary::HtmlForm::Fields::RadioButtonGroup.compatible_with?(elements) }
+
+    context "with checkboxen" do
+      let(:markup) do
+        %{
+          <input type="checkbox" name="field" value="one">
+          <input type="checkbox" name="field" value="two">
+        }
+      end
+
+      it { should be_false }
+    end
+
+    context "with radio buttons" do
+      let(:markup) do
+        %{
+          <input type="radio" name="field" value="one">
+          <input type="radio" name="field" value="two">
+        }
+      end
+
+      it { should be_true }
+    end
+
+    context "with a sweet mix of the two" do
+      let(:markup) do
+        %{
+          <input type="checkbox" name="field" value="one">
+          <input type="radio" name="field" value="two">
+        }
+      end
+
+      it { should be_false }
+    end
+  end
+
   describe "validations" do
     subject(:radio_group) { Formulary::HtmlForm::Fields::RadioButtonGroup.new("food", elements) }
 
