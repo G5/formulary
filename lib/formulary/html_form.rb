@@ -1,65 +1,19 @@
 module Formulary
   class HtmlForm
-    class Field
-      attr_accessor :name, :type, :required, :pattern
+    SINGULAR_FIELD_SELECTOR = <<-EOS
+      input[type!='submit'][type!='radio'][type!='checkbox'],
+      textarea,
+      select
+    EOS
 
-      def initialize(name, type, required, pattern=nil, valid_values)
-        @name = name
-        @type = type
-        @required = required
-        @pattern = pattern
-        @valid_values = valid_values
-      end
-
-      def set_value(value)
-        @value = value
-      end
-
-      def valid?
-        presence_correct && pattern_correct && correct_for_type && value_in_options
-      end
-
-      def error
-        return "required" unless presence_correct
-        return "format" unless pattern_correct
-        return "not a valid #{@type}" unless correct_for_type
-        return "must choose an item from the list" unless value_in_options
-      end
-
-    protected
-
-      def presence_correct
-        !required || @value.present?
-      end
-
-      def pattern_correct
-        return true if @pattern.blank? || @value.blank?
-        @value.match(Regexp.new(@pattern))
-      end
-
-      def correct_for_type
-        return true if @value.blank?
-
-        case @type
-        when "email"
-          EmailVeracity::Address.new(@value).valid?
-        else
-          true
-        end
-      end
-
-      def value_in_options
-        return true if @valid_values.nil?
-        @valid_values.include?(@value)
-      end
-    end
+    GROUPED_FIELD_SELECTOR = <<-EOS
+      input[type='radio'],
+      input[type='checkbox']
+    EOS
 
     def initialize(markup)
       @markup = markup
-    end
-
-    def fields
-      @fields ||= build_fields
+      fields
     end
 
     def valid?(params)
@@ -80,45 +34,49 @@ module Formulary
 
   protected
 
+    def fields
+      @fields || build_fields
+    end
+
     def find_field(name)
       fields.detect { |field| field.name == name.to_s }
     end
 
     def build_fields
+      @fields = []
       doc = Nokogiri::HTML(@markup)
 
-      doc.css("input[type!='submit'], textarea, select").map do |input|
-        type = case input.name
-        when "textarea"
-          "textarea"
-        when "select"
-          "select"
-        else
-          input.attributes["type"].value
+      build_singular_fields_from(doc)
+      build_grouped_fields_from(doc)
+    end
+
+    def build_singular_fields_from(doc)
+      doc.css(SINGULAR_FIELD_SELECTOR.strip).map do |element|
+        field_klass = FIELD_TYPES.detect { |k| k.compatible_with?(element) }
+        if field_klass.nil?
+          raise UnsupportedFieldType.new("I can't handle this field: #{element.inspect}")
         end
-        pattern = input.attributes.include?("pattern") ? input.attributes["pattern"].value : nil
+        @fields << field_klass.new(element)
+      end
+    end
 
-        valid_values = nil
-        if input.name == "select"
-          options = input.css("option")
+    def build_grouped_fields_from(doc)
+      grouped_elements = doc.css(GROUPED_FIELD_SELECTOR.strip).group_by do |element|
+        element.attributes["name"].value
+      end
 
-          valid_values = options.map do |option|
-            option["value"] ? option["value"] : option.text
-          end
-        end
+      grouped_elements.each do |element_group|
+        group_name, elements = *element_group
 
-        Field.new(
-          input.attributes["name"].value,
-          type,
-          input.attributes.include?("required"),
-          pattern,
-          valid_values
-        )
+        group_klass = FIELD_GROUP_TYPES.detect { |k| k.compatible_with?(elements) }
+        @fields << group_klass.new(group_name, elements)
       end
     end
   end
 
   class UnexpectedParameter < StandardError
+  end
 
+  class UnsupportedFieldType < StandardError
   end
 end

@@ -1,4 +1,7 @@
 require 'pry'
+require 'support/shared_examples_for_pattern'
+require 'support/shared_examples_for_required'
+require 'support/element_helper'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
