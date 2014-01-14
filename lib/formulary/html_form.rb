@@ -18,9 +18,13 @@ module Formulary
 
     def valid?(params)
       params.each do |key, value|
-        raise UnexpectedParameter.new("Got unexpected field '#{key}'") unless find_field(key)
-
-        find_field(key).set_value(value)
+        if value.kind_of?(Hash)
+          value.each do |nested_key, nested_value|
+            set_field_value("#{key}[#{nested_key}]", nested_value)
+          end
+        else
+          set_field_value(key, value)
+        end
       end
 
       fields.all?(&:valid?)
@@ -33,6 +37,12 @@ module Formulary
     end
 
   protected
+
+    def set_field_value(field_name, value)
+      field = find_field(field_name)
+      raise UnexpectedParameter.new("Got unexpected field '#{field_name}'") unless field
+      field.set_value(value)
+    end
 
     def fields
       @fields || build_fields
