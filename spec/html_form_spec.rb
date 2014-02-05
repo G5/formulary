@@ -53,6 +53,8 @@ describe Formulary::HtmlForm do
 
           <input type="radio" name="beverages" value="water">Water<br>
 
+          <input type="date" name="date" />
+
           <input type="hidden" name="syndication_url" value="example.com" />
 
           <input type="checkbox" name="terms">
@@ -118,7 +120,7 @@ describe Formulary::HtmlForm do
         context "with an invalid submission" do
           let(:params) do
             {
-              email: "invalid", g5_email: "test@example.com", foods: "water"
+              email: "invalid", g5_email: "test@example.com", foods: "water", date: "4 score and 7 years ago"
             }
           end
 
@@ -126,6 +128,7 @@ describe Formulary::HtmlForm do
           its(["email"]) { should include("email") }
           its(["g5_email"]) { should include("format") }
           its(["foods"]) { should include("choose") }
+          its(["date"]) { should include("date") }
         end
       end
     end

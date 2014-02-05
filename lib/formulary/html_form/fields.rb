@@ -10,6 +10,8 @@ require 'formulary/html_form/fields/tel_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::TelInput
 require 'formulary/html_form/fields/hidden_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::HiddenInput
+require 'formulary/html_form/fields/date_input'
+Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::DateInput
 require 'formulary/html_form/fields/textarea'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::Textarea
 require 'formulary/html_form/fields/select'
