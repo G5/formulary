@@ -1,5 +1,7 @@
 module Formulary
   class HtmlForm
+    include Labels
+
     SINGULAR_FIELD_SELECTOR = <<-EOS
       input[type!='submit'][type!='radio'][type!='checkbox'],
       textarea,
@@ -38,6 +40,10 @@ module Formulary
 
   protected
 
+    def document
+      @document ||= Nokogiri::HTML(@markup)
+    end
+
     def set_field_value(field_name, value)
       field = find_field(field_name)
       raise UnexpectedParameter.new("Got unexpected field '#{field_name}'") unless field
@@ -54,14 +60,13 @@ module Formulary
 
     def build_fields
       @fields = []
-      doc = Nokogiri::HTML(@markup)
 
-      build_singular_fields_from(doc)
-      build_grouped_fields_from(doc)
+      build_singular_fields_from
+      build_grouped_fields_from
     end
 
-    def build_singular_fields_from(doc)
-      doc.css(SINGULAR_FIELD_SELECTOR.strip).map do |element|
+    def build_singular_fields_from
+      document.css(SINGULAR_FIELD_SELECTOR.strip).map do |element|
         field_klass = FIELD_TYPES.detect { |k| k.compatible_with?(element) }
         if field_klass.nil?
           raise UnsupportedFieldType.new("I can't handle this field: #{element.inspect}")
@@ -70,8 +75,8 @@ module Formulary
       end
     end
 
-    def build_grouped_fields_from(doc)
-      grouped_elements = doc.css(GROUPED_FIELD_SELECTOR.strip).group_by do |element|
+    def build_grouped_fields_from
+      grouped_elements = document.css(GROUPED_FIELD_SELECTOR.strip).group_by do |element|
         element.attributes["name"].value
       end
 

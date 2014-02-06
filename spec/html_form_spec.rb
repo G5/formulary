@@ -12,22 +12,21 @@ describe Formulary::HtmlForm do
 
           <div class="field">
             <label for="first_name">First Name</label>
-            <input type="text" name="first_name" required />
+            <input type="text" id="first_name" name="first_name" required />
           </div>
 
           <div class="field">
-            <label for="last_name">Last Name</label>
             <input type="text" name="last_name" required />
           </div>
 
           <div class="field">
-            <label for="email">Email</label>
-            <input type="email" name="email" required />
+            <label for="email"></label>
+            <input type="email" id="email" name="email" required />
           </div>
 
           <div class="field">
-            <label for="g5_email">G5 Email</label>
-            <input type="email" name="g5_email" pattern="@getg5\.com$" />
+            <label for="company_email">G5 Email</label>
+            <input type="email" id="company_email" name="g5_email" pattern="@getg5\.com$" />
           </div>
 
           <div class="field">
@@ -48,8 +47,11 @@ describe Formulary::HtmlForm do
             </select>
           </div>
 
-          <input type="radio" name="foods" value="bacon">Bacon<br>
-          <input type="radio" name="foods" value="butter" checked>Butter<br>
+              <fieldset>
+                <legend>What is your favorite grease?</legend>
+                <label><input type="radio" name="foods" value="bacon">Bacon</label>
+                <label><input type="radio" name="foods" value="butter" checked>Butter</label>
+              </fieldset>
 
           <input type="radio" name="beverages" value="water">Water<br>
 
@@ -57,7 +59,9 @@ describe Formulary::HtmlForm do
 
           <input type="hidden" name="syndication_url" value="example.com" />
 
-          <input type="checkbox" name="terms">
+          <label>
+            <input type="checkbox" name="terms">I accept your terms
+          </label>
 
           <input type="submit" value="Apply" />
         </form>
@@ -130,6 +134,42 @@ describe Formulary::HtmlForm do
           its(["foods"]) { should include("choose") }
           its(["date"]) { should include("date") }
         end
+      end
+    end
+
+    describe "#label_for_field" do
+      subject { html_form.label_for_field(field_name) }
+
+      context "with a label with a for attribute" do
+        let(:field_name) { "first_name" }
+        it { should eq("First Name") }
+      end
+
+      context "with no matching label" do
+        let(:field_name) { "last_name" }
+        it { should be_nil }
+      end
+
+      context "with a label with no text" do
+        let(:field_name) { "email" }
+        it { should eq("") }
+      end
+
+      context "with a parent label" do
+        let(:field_name) { "terms" }
+        it { should eq("I accept your terms") }
+      end
+
+      context "with a name and id mismatch on the field" do
+        let(:field_name) { "g5_email" }
+        it { should eq("G5 Email") }
+      end
+
+      context "with a fieldset" do
+        let(:field_name) { "foods" }
+        its(["fieldset"]) { should eq("What is your favorite grease?") }
+        its(["bacon"]) { should eq("Bacon") }
+        its(["butter"]) { should eq("Butter") }
       end
     end
   end

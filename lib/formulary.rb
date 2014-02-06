@@ -16,4 +16,5 @@ end
 
 require "formulary/version"
 require "formulary/html_form/fields"
+require "formulary/html_form/labels"
 require "formulary/html_form"
