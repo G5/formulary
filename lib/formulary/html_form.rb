@@ -84,6 +84,9 @@ module Formulary
         group_name, elements = *element_group
 
         group_klass = FIELD_GROUP_TYPES.detect { |k| k.compatible_with?(elements) }
+        if group_klass.nil?
+          raise UnsupportedFieldType.new("I can't handle these fields: #{elements.inspect}")
+        end
         @fields << group_klass.new(group_name, elements)
       end
     end

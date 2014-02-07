@@ -79,6 +79,19 @@ describe Formulary::HtmlForm do
       end
     end
 
+    context "with a mismatch of field types for a group" do
+      let(:markup) do
+        %{
+          <input type="radio" name="bacon" />
+          <input type="checkbox" name="bacon" />
+        }
+      end
+
+      it "explodes" do
+        expect { html_form }.to raise_error(Formulary::UnsupportedFieldType, /bacon/)
+      end
+    end
+
     describe "validations" do
       let(:valid_params) do
         {
