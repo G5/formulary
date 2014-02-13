@@ -21,8 +21,8 @@ describe Formulary::HtmlForm::Fields::Textarea do
   end
 
   it_should_behave_like "a field that allows the required attribute" do
-    let(:markup_with_required) { %{<textarea name="field" required></textarea>} }
-    let(:markup_without_required) { %{<textarea name="field"></textarea>} }
+    let(:markup_with_required) { %{<textarea id="field" name="field" required></textarea>} }
+    let(:markup_without_required) { %{<textarea id="field" name="field"></textarea>} }
     let(:valid_value) { "test" }
   end
 end

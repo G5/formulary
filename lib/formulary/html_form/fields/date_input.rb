@@ -10,7 +10,7 @@ module Formulary::HtmlForm::Fields
 
     def error
       return super if super.present?
-      return "Invalid date, please use yyyy-mm-dd format." unless date_correct?
+      return "'#{label}' is not a properly formatted date, please use YYYY-MM-DD" unless date_correct?
     end
 
   protected

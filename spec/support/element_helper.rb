@@ -6,7 +6,7 @@ module ElementHelper
   def elements
     @elements ||= \
       Nokogiri::HTML("<html><body>#{markup}</body></html>").
-        css("body > *")
+        css("body input, body textarea, body select")
   end
 end
 

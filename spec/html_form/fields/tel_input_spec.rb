@@ -17,13 +17,13 @@ describe Formulary::HtmlForm::Fields::TelInput do
   end
 
   it_should_behave_like "a field that allows the required attribute" do
-    let(:markup_with_required) { %{<input type="tel" name="field" required />} }
-    let(:markup_without_required) { %{<input type="tel" name="field" />} }
+    let(:markup_with_required) { %{<input type="tel" id="field" name="field" required />} }
+    let(:markup_without_required) { %{<input type="tel" id="field" name="field" />} }
     let(:valid_value) { "123-123-1234" }
   end
 
   it_should_behave_like "a field that allows the pattern attribute" do
-    let(:markup) { '<input type="tel" name="field" pattern="\d{3}-\d{3}-\d{4}" />' }
+    let(:markup) { '<input type="tel" id="field" name="field" pattern="\d{3}-\d{3}-\d{4}" />' }
     let(:valid_value) { "123-123-1234" }
   end
 end

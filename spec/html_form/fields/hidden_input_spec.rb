@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Formulary::HtmlForm::Fields::HiddenInput do
+  let(:html_form) { Formulary::HtmlForm.new(markup) }
+
   describe ".compatible_with?" do
     subject { Formulary::HtmlForm::Fields::HiddenInput.compatible_with?(element) }
     let(:markup) { %{<input type="#{type}" name="name" />} }
@@ -17,7 +19,7 @@ describe Formulary::HtmlForm::Fields::HiddenInput do
   end
 
   describe "validations" do
-    subject(:input) { Formulary::HtmlForm::Fields::HiddenInput.new(element) }
+    subject(:input) { Formulary::HtmlForm::Fields::HiddenInput.new(html_form, element) }
     let(:markup) { %{<input type="hidden" name="field"></input>} }
 
     context "passed a value" do

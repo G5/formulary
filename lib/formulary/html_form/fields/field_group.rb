@@ -6,8 +6,8 @@ module Formulary::HtmlForm::Fields
       end
     end
 
-    def initialize(group_name, elements)
-      @group_name, @elements = group_name, elements
+    def initialize(html_form, group_name, elements)
+      @html_form, @group_name, @elements = html_form, group_name, elements
     end
 
     def name
@@ -20,7 +20,7 @@ module Formulary::HtmlForm::Fields
 
     def error
       return super if super.present?
-      return "choose" if !value_in_list?
+      return "'#{label}' must be chosen from the available options" if !value_in_list?
     end
   end
 end

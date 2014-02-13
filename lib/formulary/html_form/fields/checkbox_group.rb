@@ -8,7 +8,7 @@ module Formulary::HtmlForm::Fields
       true
     end
 
-    def initialize(group_name, elements)
+    def initialize(html_form, group_name, elements)
       super
       @values = []
     end

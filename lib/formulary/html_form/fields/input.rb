@@ -15,7 +15,7 @@ module Formulary::HtmlForm::Fields
 
     def error
       return super if super.present?
-      return "format" unless pattern_correct?
+      return "'#{label}' does not match the expected format" unless pattern_correct?
     end
 
   protected

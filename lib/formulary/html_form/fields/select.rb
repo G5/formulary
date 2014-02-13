@@ -9,7 +9,7 @@ module Formulary::HtmlForm::Fields
     end
 
     def error
-      return "choose" unless valid?
+      return "'#{label}' must be chosen from the available options" unless valid?
     end
 
   protected

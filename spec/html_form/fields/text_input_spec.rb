@@ -17,13 +17,13 @@ describe Formulary::HtmlForm::Fields::TextInput do
   end
 
   it_should_behave_like "a field that allows the required attribute" do
-    let(:markup_with_required) { %{<input type="text" name="field" required />} }
-    let(:markup_without_required) { %{<input type="text" name="field" />} }
+    let(:markup_with_required) { %{<input type="text" id="field" name="field" required />} }
+    let(:markup_without_required) { %{<input type="text" id="field" name="field" />} }
     let(:valid_value) { "test" }
   end
 
   it_should_behave_like "a field that allows the pattern attribute" do
-    let(:markup) { %{<input type="text" name="field" pattern="^test$" />} }
+    let(:markup) { %{<input type="text" id="field" name="field" pattern="^test$" />} }
     let(:valid_value) { "test" }
   end
 end

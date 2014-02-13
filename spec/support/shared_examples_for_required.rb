@@ -1,5 +1,7 @@
 shared_examples_for "a field that allows the required attribute" do
-  subject(:input) { described_class.new(element) }
+  let(:markup_with_label) { "<label for='field'>Field</label>#{markup}" }
+  let(:html_form) { Formulary::HtmlForm.new(markup_with_label) }
+  subject(:input) { described_class.new(html_form, element) }
 
   context "required" do
     let(:markup) { markup_with_required }
@@ -19,7 +21,7 @@ shared_examples_for "a field that allows the required attribute" do
     context "submitted a nil value" do
       before { input.set_value(nil) }
       it { should_not be_valid }
-      its(:error) { should include("required") }
+      its(:error) { should eql("'Field' is required") }
     end
   end
 

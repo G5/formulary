@@ -71,7 +71,7 @@ module Formulary
         if field_klass.nil?
           raise UnsupportedFieldType.new("I can't handle this field: #{element.inspect}")
         end
-        @fields << field_klass.new(element)
+        @fields << field_klass.new(self, element)
       end
     end
 
@@ -87,7 +87,7 @@ module Formulary
         if group_klass.nil?
           raise UnsupportedFieldType.new("I can't handle these fields: #{elements.inspect}")
         end
-        @fields << group_klass.new(group_name, elements)
+        @fields << group_klass.new(self, group_name, elements)
       end
     end
   end

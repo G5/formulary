@@ -4,8 +4,8 @@ module Formulary::HtmlForm::Fields
       false
     end
 
-    def initialize(element)
-      @element = element
+    def initialize(html_form, element)
+      @html_form, @element = html_form, element
     end
 
     def name
@@ -21,7 +21,19 @@ module Formulary::HtmlForm::Fields
     end
 
     def error
-      return "required" if supports_required? && !presence_correct?
+      return "'#{label}' is required" if supports_required? && !presence_correct?
+    end
+
+    def label
+      @label ||= \
+        begin
+          l = @html_form.label_for_field(name)
+
+          if l.nil? then nil
+          elsif l.is_a?(String) then l
+          else l["fieldset"]
+          end
+        end
     end
 
   protected

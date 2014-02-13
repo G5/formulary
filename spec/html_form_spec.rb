@@ -20,7 +20,7 @@ describe Formulary::HtmlForm do
           </div>
 
           <div class="field">
-            <label for="email"></label>
+            <label for="email">Email</label>
             <input type="email" id="email" name="email" required />
           </div>
 
@@ -55,13 +55,19 @@ describe Formulary::HtmlForm do
 
           <input type="radio" name="beverages" value="water">Water<br>
 
-          <input type="date" name="date" />
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" />
 
           <input type="hidden" name="syndication_url" value="example.com" />
 
           <label>
             <input type="checkbox" name="terms">I accept your terms
           </label>
+
+          <div class="field">
+            <label for="labeless_field"></label>
+            <input type="email" id="labeless_field" name="labeless_field" />
+          </div>
 
           <input type="submit" value="Apply" />
         </form>
@@ -141,11 +147,11 @@ describe Formulary::HtmlForm do
             }
           end
 
-          its(["first_name"]) { should include("required") }
-          its(["email"]) { should include("email") }
-          its(["g5_email"]) { should include("format") }
-          its(["foods"]) { should include("choose") }
-          its(["date"]) { should include("date") }
+          its(["first_name"]) { should eql("'First Name' is required") }
+          its(["email"]) { should include("'Email' is not a valid email address") }
+          its(["g5_email"]) { should include("'G5 Email' does not match the expected format") }
+          its(["foods"]) { should include("'What is your favorite grease?' must be chosen from the available options") }
+          its(["date"]) { should include("'Date' is not a properly formatted date") }
         end
       end
     end
@@ -164,7 +170,7 @@ describe Formulary::HtmlForm do
       end
 
       context "with a label with no text" do
-        let(:field_name) { "email" }
+        let(:field_name) { "labeless_field" }
         it { should eq("") }
       end
 

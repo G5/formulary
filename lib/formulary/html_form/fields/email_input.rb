@@ -10,7 +10,7 @@ module Formulary::HtmlForm::Fields
 
     def error
       return super if super.present?
-      return "email" unless email_correct?
+      return "'#{label}' is not a valid email address" unless email_correct?
     end
 
   protected

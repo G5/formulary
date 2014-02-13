@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Formulary::HtmlForm::Fields::CheckboxGroup do
+  let(:markup_with_label) do
+    "<fieldset><legend>Field</legend>#{markup}</fieldset>"
+  end
+  let(:html_form) { Formulary::HtmlForm.new(markup_with_label) }
+
   describe ".compatible_with?" do
     subject { Formulary::HtmlForm::Fields::CheckboxGroup.compatible_with?(elements) }
 
@@ -40,14 +45,18 @@ describe Formulary::HtmlForm::Fields::CheckboxGroup do
 
   describe "validations" do
     subject(:checkbox_group) do
-      Formulary::HtmlForm::Fields::CheckboxGroup.new("food", elements)
+      Formulary::HtmlForm::Fields::CheckboxGroup.new(html_form, "field", elements)
     end
 
     context "when one of the items in the group is required" do
       let(:markup) do
         %{
-          <input type="checkbox" name="field" value="first" required>
-          <input type="checkbox" name="field" value="second">
+          <label>
+            First<input type="checkbox" name="field" value="first" required>
+          </label>
+          <label>
+            Second<input type="checkbox" name="field" value="second">
+          </label>
         }
       end
 
@@ -69,27 +78,31 @@ describe Formulary::HtmlForm::Fields::CheckboxGroup do
         before { checkbox_group.set_value("second") }
 
         it { should_not be_valid }
-        its(:error) { should include("required") }
+        its(:error) { should eql("'Field' is required") }
       end
 
       context "with a value that isn't expected" do
         before { checkbox_group.set_value([ "first", "invalid" ]) }
 
         it { should_not be_valid }
-        its(:error) { should include("choose") }
+        its(:error) { should eql("'Field' must be chosen from the available options") }
       end
 
       context "with no value" do
         it { should_not be_valid }
-        its(:error) { should include("required") }
+        its(:error) { should eql("'Field' is required") }
       end
     end
 
     context "when none are required" do
       let(:markup) do
         %{
-          <input type="checkbox" name="field" value="first">
-          <input type="checkbox" name="field" value="second">
+          <label>
+            <input type="checkbox" name="field" value="first">
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="second">
+          </label>
         }
       end
 
@@ -97,7 +110,7 @@ describe Formulary::HtmlForm::Fields::CheckboxGroup do
         before { checkbox_group.set_value("invalid") }
 
         it { should_not be_valid }
-        its(:error) { should include("choose") }
+        its(:error) { should eql("'Field' must be chosen from the available options") }
       end
 
       context "with no value" do
@@ -109,7 +122,7 @@ describe Formulary::HtmlForm::Fields::CheckboxGroup do
         before { checkbox_group.set_value("on") }
 
         it { should_not be_valid }
-        its(:error) { should include("choose") }
+        its(:error) { should eql("'Field' must be chosen from the available options") }
       end
     end
 
