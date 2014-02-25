@@ -4,6 +4,8 @@ require 'formulary/html_form/fields/input'
 
 require 'formulary/html_form/fields/text_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::TextInput
+require 'formulary/html_form/fields/number_input'
+Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::NumberInput
 require 'formulary/html_form/fields/email_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::EmailInput
 require 'formulary/html_form/fields/tel_input'
