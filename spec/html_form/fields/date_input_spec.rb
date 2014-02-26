@@ -27,7 +27,7 @@ describe Formulary::HtmlForm::Fields::DateInput do
 
   describe "validations" do
     subject(:input) { Formulary::HtmlForm::Fields::DateInput.new(html_form, element) }
-    let(:markup) { %{<input type="date" id="field" name="test" />} }
+    let(:markup) { %{<input type="date" id="field" name="test" min="2013-12-31" max="2014-02-01" />} }
 
     context "with a valid date" do
       before { input.set_value("2014-01-01") }
@@ -37,10 +37,24 @@ describe Formulary::HtmlForm::Fields::DateInput do
     end
 
     context "with a invalid date" do
-      before { input.set_value("1/5/11") }
+      before { input.set_value("1/5/14") }
 
       it { should_not be_valid }
       its(:error) { should eql("'Field' is not a properly formatted date, please use YYYY-MM-DD") }
+    end
+
+    context "with a date less than the min" do
+      before { input.set_value("2013-01-01") }
+
+      it { should_not be_valid }
+      its(:error) { should eql("'Field' must be a date after 2013-12-31") }
+    end
+
+    context "with a date greater than the max" do
+      before { input.set_value("2015-01-01") }
+
+      it { should_not be_valid }
+      its(:error) { should eql("'Field' must be a date before 2014-02-01") }
     end
   end
 end
