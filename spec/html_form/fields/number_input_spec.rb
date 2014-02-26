@@ -8,7 +8,7 @@ describe Formulary::HtmlForm::Fields::NumberInput do
     subject { Formulary::HtmlForm::Fields::NumberInput.compatible_with?(element) }
     let(:markup) { %{<input type="#{type}" name="name" />} }
 
-    context "text type" do
+    context "number type" do
       let(:type) { "number" }
       it { should be_true }
     end
