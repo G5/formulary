@@ -6,6 +6,10 @@ require 'formulary/html_form/fields/text_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::TextInput
 require 'formulary/html_form/fields/search_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::SearchInput
+require 'formulary/html_form/fields/password_input'
+Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::PasswordInput
+require 'formulary/html_form/fields/color_input'
+Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::ColorInput
 require 'formulary/html_form/fields/number_input'
 Formulary::HtmlForm::FIELD_TYPES << Formulary::HtmlForm::Fields::NumberInput
 require 'formulary/html_form/fields/range_input'

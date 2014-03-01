@@ -79,6 +79,21 @@ describe Formulary::HtmlForm do
             <input type="range" name="range" id="range" step="5" />
           </div>
 
+          <div class="field">
+            <label for="search">Search</label>
+            <input type="search" name="search" id="search" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" />
+          </div>
+
+          <div class="field">
+            <label for="color">Color</label>
+            <input type="color" name="color" id="color" />
+          </div>
+
           <input type="submit" value="Apply" />
         </form>
       </div>
