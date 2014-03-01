@@ -95,6 +95,8 @@ describe Formulary::HtmlForm do
           </div>
 
           <input type="submit" value="Apply" />
+          <input type="button" value="Apply" />
+          <input type="image" value="Apply" />
         </form>
       </div>
       EOS
