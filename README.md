@@ -80,9 +80,10 @@ html_form.valid?({ unknown: "value" })
 - week
 
 **Ignored Field Types (not validated but does not make things explode)
-- submit
 - button
 - image
+- reset
+- submit
 
 **Supported Input Attributes**
 - max (number, range, date)
@@ -102,7 +103,6 @@ html_form.valid?({ unknown: "value" })
 - datetime
 - datetime-local
 - file
-- reset
 - time
 - url 
 

@@ -94,9 +94,10 @@ describe Formulary::HtmlForm do
             <input type="color" name="color" id="color" />
           </div>
 
-          <input type="submit" value="Apply" />
-          <input type="button" value="Apply" />
-          <input type="image" value="Apply" />
+          <input type="submit" value="Submit" />
+          <input type="button" value="Button" />
+          <input type="image" value="Image" />
+          <input type="reset" value="Reset" />
         </form>
       </div>
       EOS

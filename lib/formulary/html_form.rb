@@ -3,7 +3,7 @@ module Formulary
     include Labels
 
     SINGULAR_FIELD_SELECTOR = <<-EOS
-      input[type!='submit'][type!='button'][type!='image'][type!='radio'][type!='checkbox'],
+      input[type!='submit'][type!='button'][type!='reset'][type!='image'][type!='radio'][type!='checkbox'],
       textarea,
       select
     EOS
