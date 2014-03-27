@@ -108,8 +108,8 @@ html_form.valid?({ unknown: "value" })
 
 ## Authors
 
-        * Don Petersen / [@dpetersen](https://github.com/dpetersen)
         * Matt Bohme / [@quady](https://github.com/quady)
+        * Don Petersen / [@dpetersen](https://github.com/dpetersen)
 
 
 ## Contributing
