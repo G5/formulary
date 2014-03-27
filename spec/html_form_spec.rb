@@ -47,11 +47,11 @@ describe Formulary::HtmlForm do
             </select>
           </div>
 
-              <fieldset>
-                <legend>What is your favorite grease?</legend>
-                <label><input type="radio" name="foods" value="bacon">Bacon</label>
-                <label><input type="radio" name="foods" value="butter" checked>Butter</label>
-              </fieldset>
+          <fieldset>
+            <legend>What is your favorite grease?</legend>
+            <label><input type="radio" name="foods" value="bacon">Bacon</label>
+            <label><input type="radio" name="foods" value="butter" checked>Butter</label>
+          </fieldset>
 
           <input type="radio" name="beverages" value="water">Water<br>
 
@@ -69,7 +69,35 @@ describe Formulary::HtmlForm do
             <input type="email" id="labeless_field" name="labeless_field" />
           </div>
 
-          <input type="submit" value="Apply" />
+          <div class="field">
+            <label for="number">Number</label>
+            <input type="number" name="number" id="number" min="5" />
+          </div>
+
+          <div class="field">
+            <label for="range">Range</label>
+            <input type="range" name="range" id="range" step="5" />
+          </div>
+
+          <div class="field">
+            <label for="search">Search</label>
+            <input type="search" name="search" id="search" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" />
+          </div>
+
+          <div class="field">
+            <label for="color">Color</label>
+            <input type="color" name="color" id="color" />
+          </div>
+
+          <input type="submit" value="Submit" />
+          <input type="button" value="Button" />
+          <input type="image" value="Image" />
+          <input type="reset" value="Reset" />
         </form>
       </div>
       EOS
@@ -143,7 +171,12 @@ describe Formulary::HtmlForm do
         context "with an invalid submission" do
           let(:params) do
             {
-              email: "invalid", g5_email: "test@example.com", foods: "water", date: "4 score and 7 years ago"
+              email: "invalid",
+              g5_email: "test@example.com",
+              foods: "water",
+              date: "4 score and 7 years ago",
+              number: "1",
+              range: "8"
             }
           end
 
@@ -152,6 +185,8 @@ describe Formulary::HtmlForm do
           its(["g5_email"]) { should include("'G5 Email' does not match the expected format") }
           its(["foods"]) { should include("'What is your favorite grease?' must be chosen from the available options") }
           its(["date"]) { should include("'Date' is not a properly formatted date") }
+          its(["number"]) { should include("'Number' must be greater than or equal to 5") }
+          its(["range"]) { should include("'Range' must be a step of 5, the nearest valid values are 5 and 10") }
         end
       end
     end
