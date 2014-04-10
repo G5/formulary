@@ -2,6 +2,10 @@ module Formulary::HtmlForm::Labels
   def label_for_field(field_name)
     fields_for_name = document.css("*[name='#{field_name}']")
 
+    if fields_for_name.empty?
+      raise "Cannot find label, field #{field_name} does not exist"
+    end
+
     if fields_for_name.length > 1
       labels_for_fieldset(fields_for_name)
     else

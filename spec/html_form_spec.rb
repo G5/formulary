@@ -192,7 +192,7 @@ describe Formulary::HtmlForm do
     end
 
     describe "#label_for_field" do
-      subject { html_form.label_for_field(field_name) }
+      subject(:label_for_field) { html_form.label_for_field(field_name) }
 
       context "with a label with a for attribute" do
         let(:field_name) { "first_name" }
@@ -224,6 +224,16 @@ describe Formulary::HtmlForm do
         its(["fieldset"]) { should eq("What is your favorite grease?") }
         its(["bacon"]) { should eq("Bacon") }
         its(["butter"]) { should eq("Butter") }
+      end
+
+      context "for a non-existant field" do
+        let(:field_name) { "nooooope" }
+
+        it "explodes helpfully" do
+          expect {
+            label_for_field
+          }.to raise_error(/label.+nooooope/)
+        end
       end
     end
   end
