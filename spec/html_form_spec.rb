@@ -232,7 +232,7 @@ describe Formulary::HtmlForm do
         it "explodes helpfully" do
           expect {
             label_for_field
-          }.to raise_error(/label.+nooooope/)
+          }.to raise_error(Formulary::FieldNotFoundError, /label.+nooooope/)
         end
       end
     end

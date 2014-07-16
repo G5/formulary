@@ -10,6 +10,7 @@ module Formulary
 end
 
 require "formulary/version"
+require "formulary/exceptions"
 require "formulary/html_form/fields"
 require "formulary/html_form/labels"
 require "formulary/html_form"
