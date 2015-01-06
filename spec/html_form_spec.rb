@@ -236,6 +236,25 @@ describe Formulary::HtmlForm do
         end
       end
     end
+
+    describe "#is_hidden_field?" do
+      subject(:is_hidden_field) { html_form.is_hidden_field?(field_name) }
+
+      context "with a hidden field" do
+        let(:field_name) { "syndication_url" }
+        it { should be_true }
+      end
+
+      context "with any other field" do
+        let(:field_name) { "first_name" }
+        it { should be_false }
+      end
+
+      context "with a non-existant field" do
+        let(:field_name) { "foobar" }
+        it { should be_false }
+      end
+    end  
   end
 
   context "with a form with nested fields" do

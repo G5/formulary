@@ -38,6 +38,11 @@ module Formulary
       end
     end
 
+    def is_hidden_field?(name)
+      field = find_field(name)
+      !!field.try(:is_hidden?)
+    end  
+
   protected
 
     def document
