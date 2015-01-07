@@ -1,12 +1,16 @@
 require 'spec_helper'
 
+module Formulary::HtmlForm::Fields
+  class SomeInput < Input; end
+end 
+
 describe Formulary::HtmlForm::Fields::Field do
+  let(:markup) { %{<input type="text" name="field" />} }
   let(:html_form) { Formulary::HtmlForm.new(markup) }
   let(:field) { Formulary::HtmlForm::Fields::Field.new(html_form, element) }
 
   describe "#name" do
     subject { field.name }
-    let(:markup) { %{<input type="text" name="field" />} }
 
     it { should eq("field") }
   end
@@ -15,7 +19,6 @@ describe Formulary::HtmlForm::Fields::Field do
     subject { field.label }
 
     context "when the there is no label" do
-      let(:markup) { %{<input type="text" name="field" />} }
       it { should be_nil }
     end
 
@@ -46,4 +49,23 @@ describe Formulary::HtmlForm::Fields::Field do
       it { should eql("Field") }
     end
   end
+
+  describe "#is_hidden?" do
+    subject { field.is_hidden? }
+
+    context "hidden" do
+      let(:field) { Formulary::HtmlForm::Fields::HiddenInput.new(html_form, element) }
+      it { should be_true }
+    end
+    
+    context "not hidden" do
+      let(:field) { Formulary::HtmlForm::Fields::TextInput.new(html_form, element) }
+      it { should be_false }
+    end  
+
+    describe "field without compatible_type defined" do
+      let(:field) { Formulary::HtmlForm::Fields::SomeInput.new(html_form, element) }
+      it { should be_false }
+    end  
+  end  
 end

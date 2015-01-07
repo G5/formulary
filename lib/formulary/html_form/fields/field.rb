@@ -36,6 +36,10 @@ module Formulary::HtmlForm::Fields
         end
     end
 
+    def is_hidden?
+      self.class.compatible_type == "hidden" rescue false
+    end  
+
   protected
 
     def supports_required?
