@@ -12,6 +12,11 @@ module Formulary::HtmlForm::Fields
       @element.attributes["name"].value
     end
 
+    def get_value_from_data_field(data_field)
+      find_first_element_with_data_field(data_field) if @element.blank? && @elements
+      @element.attributes.include?(data_field) ? @element.attributes[data_field].value : nil
+    end
+
     def set_value(value)
       @value = value
     end
@@ -38,9 +43,18 @@ module Formulary::HtmlForm::Fields
 
     def is_hidden?
       self.class.compatible_type == "hidden" rescue false
-    end  
+    end
 
   protected
+
+    def find_first_element_with_data_field(data_field)
+      @elements.each do |e|
+        if e.attributes.include?(data_field)
+          @element = e
+          return
+        end
+      end
+    end
 
     def supports_required?
       self.class.supports_required?
