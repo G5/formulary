@@ -43,9 +43,9 @@ module Formulary
       !!field.try(:is_hidden?)
     end
 
-    def data_field_value_true?(name, data_field)
+    def data_field_value(name, data_field)
       field = find_field(name)
-      field.get_value_from_data_field(data_field).to_s == "true"
+      field.get_value_from_data_field(data_field)
     end
 
   protected

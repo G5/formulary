@@ -258,18 +258,18 @@ describe Formulary::HtmlForm do
 
     describe "#hide_from_email?" do
       let(:data_field) {"data-hide-from-email"}
-      subject(:data_field_value_true) { html_form.data_field_value_true?(field_name, data_field) }
+      subject(:data_field_value) { html_form.data_field_value(field_name, data_field) }
       context "data-hide-from-email is not set" do
         let(:field_name) { "first_name" }
-        it { should be_false }
+        it { should be_nil }
       end
       context "data-hide-from-email is false" do
         let(:field_name) { "date" }
-        it { should be_false }
+        it { should eql("false") }
       end
       context "data-hide-from-email is true" do
         let(:field_name) { "terms" }
-        it { should be_true }
+        it { should eql("true") }
       end
     end
   end
