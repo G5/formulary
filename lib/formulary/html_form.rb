@@ -41,7 +41,12 @@ module Formulary
     def is_hidden_field?(name)
       field = find_field(name)
       !!field.try(:is_hidden?)
-    end  
+    end
+
+    def data_field_value(name, data_field)
+      field = find_field(name)
+      field.get_value_from_data_field(data_field)
+    end
 
   protected
 

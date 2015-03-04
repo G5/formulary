@@ -56,12 +56,12 @@ describe Formulary::HtmlForm do
           <input type="radio" name="beverages" value="water">Water<br>
 
           <label for="date">Date</label>
-          <input type="date" id="date" name="date" />
+          <input type="date" id="date" name="date" data-hide-from-email="false" />
 
           <input type="hidden" name="syndication_url" value="example.com" />
 
           <label>
-            <input type="checkbox" name="terms">I accept your terms
+            <input type="checkbox" name="terms" data-hide-from-email="true"/>I accept your terms
           </label>
 
           <div class="field">
@@ -254,7 +254,24 @@ describe Formulary::HtmlForm do
         let(:field_name) { "foobar" }
         it { should be_false }
       end
-    end  
+    end
+
+    describe "#hide_from_email?" do
+      let(:data_field) {"data-hide-from-email"}
+      subject(:data_field_value) { html_form.data_field_value(field_name, data_field) }
+      context "data-hide-from-email is not set" do
+        let(:field_name) { "first_name" }
+        it { should be_nil }
+      end
+      context "data-hide-from-email is false" do
+        let(:field_name) { "date" }
+        it { should eql("false") }
+      end
+      context "data-hide-from-email is true" do
+        let(:field_name) { "terms" }
+        it { should eql("true") }
+      end
+    end
   end
 
   context "with a form with nested fields" do
