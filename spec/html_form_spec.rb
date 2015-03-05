@@ -256,9 +256,13 @@ describe Formulary::HtmlForm do
       end
     end
 
-    describe "#hide_from_email?" do
+    describe "#data_field_value" do
       let(:data_field) {"data-hide-from-email"}
       subject(:data_field_value) { html_form.data_field_value(field_name, data_field) }
+      context "field is not found" do
+        let(:field_name) { "scooby" }
+        it { should be_nil}
+      end
       context "data-hide-from-email is not set" do
         let(:field_name) { "first_name" }
         it { should be_nil }
