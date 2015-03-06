@@ -30,6 +30,11 @@ describe Formulary::HtmlForm::Fields::Field do
                       <input type="checkbox" name="duper" data-hide-from-email="bar">}}
       it {should eql("foo")}
     end
+
+    context "@element is nil" do
+      let(:markup){""}
+      it {should be_nil}
+    end
   end
 
   describe "#label" do

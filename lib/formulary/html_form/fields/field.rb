@@ -14,7 +14,11 @@ module Formulary::HtmlForm::Fields
 
     def get_value_from_data_field(data_field)
       find_first_element_with_data_field(data_field) if @element.blank? && @elements
-      @element.attributes.include?(data_field) ? @element.attributes[data_field].value : nil
+      unless @element.blank?
+        @element.attributes.include?(data_field) ? @element.attributes[data_field].value : nil
+      else
+        nil
+      end
     end
 
     def set_value(value)
