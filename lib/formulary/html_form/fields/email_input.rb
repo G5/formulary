@@ -7,7 +7,7 @@ module Formulary::HtmlForm::Fields
     # for now.
     #
     # http://stackoverflow.com/questions/4940120/is-there-a-java-implementation-of-the-html5-input-email-validation
-    REGEX = /[A-Za-z0-9!#$%&'*+-\/=?^_`{|}~]+@[A-Za-z0-9-]+(.[A-Za-z0-9-]+)*/
+    REGEX = /[A-Za-z0-9!#$%&'*+-\/=?^_`{|}~]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+/
 
     def self.compatible_type
       "email"
