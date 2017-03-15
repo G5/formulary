@@ -48,6 +48,13 @@ describe Formulary::HtmlForm::Fields::EmailInput do
       its(:error) { should eql("'Field' is not a valid email address") }
     end
 
+    context "with a different invalid email address" do
+      before { input.set_value("bob@mail@com") }
+
+      it { should_not be_valid }
+      its(:error) { should eql("'Field' is not a valid email address") }
+    end
+
     context "with an email address that is somewhat invalid but passes the client-side spec" do
       before { input.set_value("e@e.e") }
 
